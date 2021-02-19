@@ -1,1 +1,1 @@
-xelWhackTheCops
+#[ModKit Wiki](../../wiki)
