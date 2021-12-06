@@ -42,14 +42,14 @@ public class WhackTheCops : MonoBehaviour {
         public bool reversed;
     }
     Rule[] rules = new Rule[] {new Rule(0, new WhackaCop[] {WhackaCop.Red, WhackaCop.Normal}, 3, false),
-        new Rule(1, new WhackaCop[] {WhackaCop.Normal, WhackaCop.Grey}, 3, true),
+        new Rule(1, new WhackaCop[] {WhackaCop.Normal, WhackaCop.Grey}, 1, true),
         new Rule(3, new WhackaCop[] {WhackaCop.Lime, WhackaCop.Cyan}, 2, true),
-        new Rule(2, new WhackaCop[] {WhackaCop.Blue, WhackaCop.Yellow}, 1, true),
+        new Rule(2, new WhackaCop[] {WhackaCop.Blue, WhackaCop.Yellow}, 3, true),
 
     };
     List<int> tableIndices = new List<int>();
-    List<int> puzzleIndices;
-    List<int> solutionIndices;
+    List<int> puzzleIndices = new List<int>();
+    List<int> solutionIndices= new List<int>();
     bool otherwise;
     int stage;
     public KMSelectable[] copSelectables;
@@ -75,22 +75,24 @@ public class WhackTheCops : MonoBehaviour {
         int rowIndex = rnd.Range(0, 5);
         int colIndex = rnd.Range(0, 5);
         tableIndices.Add(table[rowIndex][colIndex]);
-        tableIndices.Add(table[rowIndex + 1][colIndex]);
-        tableIndices.Add(table[rowIndex + 1][colIndex + 1]);
         tableIndices.Add(table[rowIndex][colIndex + 1]);
-        puzzleIndices = tableIndices.Shuffle();
-        for (int i = 0; i < 4; i++)  cops[i].sprite = textures[tableIndices[i]]; 
+        tableIndices.Add(table[rowIndex + 1][colIndex + 1]);
+        tableIndices.Add(table[rowIndex + 1][colIndex]);
+        puzzleIndices = tableIndices.ToList();
+        puzzleIndices.Shuffle();
+        for (int i = 0; i < 4; i++)  cops[i].sprite = textures[puzzleIndices[i]]; 
         Debug.LogFormat("[Whack The Cops #{0}] The chosen Whacka Cops are {1}, {2}, {3}, and {4}.", moduleID, ((WhackaCop)puzzleIndices[0]).ToString("g"), ((WhackaCop)puzzleIndices[1]).ToString("g"), ((WhackaCop)puzzleIndices[2]).ToString("g"), ((WhackaCop)puzzleIndices[3]).ToString("g"));
     }
     void EvaluateRules()
     {
-        solutionIndices = tableIndices;
+        solutionIndices = tableIndices.ToList();
         foreach (Rule i in rules)
         {
-            if (i.colors.Contains( (WhackaCop)puzzleIndices[i.moduleIndex]))
+            if (i.colors.Contains( (WhackaCop) puzzleIndices[i.moduleIndex]))
             {
                 if (i.reversed) solutionIndices.Reverse();
                 solutionIndices = Rotate(solutionIndices, i.solutionIndex);
+                break;
             }
         }
         Debug.LogFormat("[Whack The Cops #{0}] The Whacka Cops in the order they should be pressed are {1}, {2}, {3}, and {4}.", moduleID, ((WhackaCop)solutionIndices[0]).ToString("g"), ((WhackaCop)solutionIndices[1]).ToString("g"), ((WhackaCop)solutionIndices[2]).ToString("g"), ((WhackaCop)solutionIndices[3]).ToString("g"));
