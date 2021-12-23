@@ -14,9 +14,7 @@ MonoBehaviour:
   id: xelWhackTheCops
   title: Whack The Cops
   author: PANOPTES, Pruz
-  description: "Added the a Whacka Cops?\n\r\nModule idea by Pruz, implementation
-    by PANOPTES.\n\r\n[url=https://ktane.timwi.de/HTML/Whack%20The%20Cops.html]HTML
-    Manual[/url]\r\n[url=https://ktane.timwi.de/PDF/Whack%20The%20Cops.pdf]PDF Manual[/url]"
-  version: 1.0
+  description: Let's  play a game called "Is this a Testharness bug?"
+  version: 0.11
   outputFolder: build
   previewImage: {fileID: 2800000, guid: ce84bc4b8fac2fd488286b387288cbe4, type: 3}
