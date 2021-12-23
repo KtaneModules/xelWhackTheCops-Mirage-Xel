@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using rnd = UnityEngine.Random;
-using KModkit;
 public class WhackTheCops : MonoBehaviour {
     public Sprite[] textures;
     public SpriteRenderer[] cops;
@@ -13,7 +11,7 @@ public class WhackTheCops : MonoBehaviour {
         Red,
         Cyan,
         Magenta,
-        Normal,
+        Dough,
         Grey,
         Lime,
         Blue,
@@ -21,12 +19,12 @@ public class WhackTheCops : MonoBehaviour {
         Black,
     }
     int[][] table = new int[][]{
-        new int[] {0,1,2,3,4,5},
-        new int[] {6,5,4,0,7,8},
-        new int[] {1,0,6,8,5,2},
-        new int[] {7,3,5,1,6,4},
-        new int[] {4,2,0,7,8,3},
-        new int[] {3,6,8,2,1,7}, };
+        new int[] {5,6,1,2,7,8},
+        new int[] {3,4,5,8,0,1},
+        new int[] {0,2,6,7,5,3},
+        new int[] {4,8,3,0,1,7},
+        new int[] {1,5,7,4,2,6},
+        new int[] {6,0,2,3,8,4}, };
     struct Rule
     {
         public Rule(int a, WhackaCop[] b, int c, bool d)
@@ -41,16 +39,14 @@ public class WhackTheCops : MonoBehaviour {
         public int solutionIndex;
         public bool reversed;
     }
-    Rule[] rules = new Rule[] {new Rule(0, new WhackaCop[] {WhackaCop.Red, WhackaCop.Normal}, 3, false),
-        new Rule(1, new WhackaCop[] {WhackaCop.Normal, WhackaCop.Grey}, 1, true),
+    Rule[] rules = new Rule[] {new Rule(0, new WhackaCop[] {WhackaCop.Red, WhackaCop.Dough}, 3, false),
+        new Rule(1, new WhackaCop[] {WhackaCop.Dough, WhackaCop.Grey}, 1, true),
         new Rule(3, new WhackaCop[] {WhackaCop.Lime, WhackaCop.Cyan}, 2, true),
         new Rule(2, new WhackaCop[] {WhackaCop.Blue, WhackaCop.Yellow}, 3, true),
-
     };
     List<int> tableIndices = new List<int>();
     List<int> puzzleIndices = new List<int>();
     List<int> solutionIndices= new List<int>();
-    bool otherwise;
     int stage;
     public KMSelectable[] copSelectables;
     public KMBombModule module;
@@ -58,6 +54,7 @@ public class WhackTheCops : MonoBehaviour {
     int moduleID;
     int moduleIDCounter = 1;
     bool solved;
+    bool activated;
 
 	void Awake () {
         moduleID = moduleIDCounter++;
@@ -68,6 +65,7 @@ public class WhackTheCops : MonoBehaviour {
         }
         PickCops();
         EvaluateRules();
+        module.OnActivate += ShowCops;
 	}
 	
 	void PickCops()
@@ -79,8 +77,9 @@ public class WhackTheCops : MonoBehaviour {
         tableIndices.Add(table[rowIndex + 1][colIndex + 1]);
         tableIndices.Add(table[rowIndex + 1][colIndex]);
         puzzleIndices = tableIndices.ToList();
-        puzzleIndices.Shuffle();
-        for (int i = 0; i < 4; i++)  cops[i].sprite = textures[puzzleIndices[i]]; 
+        puzzleIndices = puzzleIndices.Shuffle();
+        if (activated)
+            for (int i = 0; i < 4; i++)  cops[i].sprite = textures[puzzleIndices[i]]; 
         Debug.LogFormat("[Whack The Cops #{0}] The chosen Whacka Cops are {1}, {2}, {3}, and {4}.", moduleID, ((WhackaCop)puzzleIndices[0]).ToString("g"), ((WhackaCop)puzzleIndices[1]).ToString("g"), ((WhackaCop)puzzleIndices[2]).ToString("g"), ((WhackaCop)puzzleIndices[3]).ToString("g"));
     }
     void EvaluateRules()
@@ -103,9 +102,15 @@ public class WhackTheCops : MonoBehaviour {
         return list.Skip(offset).Concat(list.Take(offset)).ToList();
     }
 
+    void ShowCops()
+    {
+        for (int i = 0; i < 4; i++) cops[i].sprite = textures[puzzleIndices[i]];
+        activated = true;
+    }
+
     void PressCop(int index)
     {
-        if (!solved)
+        if (!solved && activated)
         {
             copSelectables[index].AddInteractionPunch();
             Debug.LogFormat("[Whack The Cops #{0}] You pressed {1}.", moduleID, ((WhackaCop)puzzleIndices[index]).ToString("g"));
@@ -124,16 +129,18 @@ public class WhackTheCops : MonoBehaviour {
             }
             else
             {
+                stage = 0;
                 module.HandleStrike();
-                StopAllCoroutines();
                 Debug.LogFormat("[Whack The Cops #{0}] That was incorrect. Strike!", moduleID);
+                tableIndices.Clear();
                 PickCops();
                 EvaluateRules();
             }
         }
     }
+
 #pragma warning disable 414
-    private string TwitchHelpMessage = "use '!{0} 1234' to press the Cops in reading order.";
+    private string TwitchHelpMessage = "Use '!{0} 1234' to press the Cops in reading order.";
 #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
@@ -150,7 +157,7 @@ public class WhackTheCops : MonoBehaviour {
             {
                 if (!validcmds.Contains(command[i]))
                 {
-                    yield return "sendtochaterror Invalid command.";
+                    yield return "sendtochaterror @{0}, invalid command.";
                     yield break;
                 }
             }
@@ -161,12 +168,25 @@ public class WhackTheCops : MonoBehaviour {
                     if (command[i] == validcmds[j])
                     {
                         yield return null;
-                        yield return new WaitForSeconds(1f);
+                        if (i != 0)
+                            yield return new WaitForSeconds(.4f);
                         copSelectables[j].OnInteract();
+                        break;
                     }
                 }
             }
         }
     }
-}
 
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        yield return null;
+        int start = stage;
+        for (int i = start; i < 4; i++)
+        {
+            if (i != start)
+                yield return new WaitForSeconds(.4f);
+            copSelectables[puzzleIndices.IndexOf(solutionIndices[i])].OnInteract();
+        }
+    }
+}
