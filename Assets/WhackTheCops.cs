@@ -11,7 +11,7 @@ public class WhackTheCops : MonoBehaviour {
         Red,
         Cyan,
         Magenta,
-        Dough,
+        Orange,
         Grey,
         Lime,
         Blue,
@@ -39,8 +39,8 @@ public class WhackTheCops : MonoBehaviour {
         public int solutionIndex;
         public bool reversed;
     }
-    Rule[] rules = new Rule[] {new Rule(0, new WhackaCop[] {WhackaCop.Red, WhackaCop.Dough}, 3, false),
-        new Rule(1, new WhackaCop[] {WhackaCop.Dough, WhackaCop.Grey}, 1, true),
+    Rule[] rules = new Rule[] {new Rule(0, new WhackaCop[] {WhackaCop.Red, WhackaCop.Orange}, 3, false),
+        new Rule(1, new WhackaCop[] {WhackaCop.Orange, WhackaCop.Grey}, 1, true),
         new Rule(3, new WhackaCop[] {WhackaCop.Lime, WhackaCop.Cyan}, 2, true),
         new Rule(2, new WhackaCop[] {WhackaCop.Blue, WhackaCop.Yellow}, 3, true),
     };
