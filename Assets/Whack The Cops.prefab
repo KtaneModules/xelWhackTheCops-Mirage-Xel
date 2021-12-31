@@ -122,6 +122,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4601782714141784}
+  - component: {fileID: 65240736074674200}
   - component: {fileID: 212696779270486624}
   - component: {fileID: 114451591055595230}
   m_Layer: 0
@@ -171,6 +172,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4513328070721032}
+  - component: {fileID: 65279246633808524}
   - component: {fileID: 212031500275955238}
   - component: {fileID: 114322657329035400}
   m_Layer: 0
@@ -222,6 +224,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4028007579216252}
+  - component: {fileID: 65974343499161520}
   - component: {fileID: 212138710159268100}
   - component: {fileID: 114264642079245240}
   m_Layer: 0
@@ -323,6 +326,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4728260613767374}
+  - component: {fileID: 65048971622731566}
   - component: {fileID: 212209400695715330}
   - component: {fileID: 114678600105627548}
   m_Layer: 0
@@ -808,6 +812,54 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1833517521898966}
   m_Mesh: {fileID: 4300000, guid: 1c46642b7f907d844bcdfcca8625afdd, type: 3}
+--- !u!65 &65048971622731566
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738335670040698}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.9399998, y: 3.94, z: 0.01}
+  m_Center: {x: -0.00000047683716, y: 0.00000023841858, z: 0}
+--- !u!65 &65240736074674200
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1444220590326378}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.9399998, y: 3.94, z: 0.01}
+  m_Center: {x: 0, y: 0.00000023841858, z: 0}
+--- !u!65 &65279246633808524
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1530423836766748}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.9399998, y: 3.94, z: 0.01}
+  m_Center: {x: -0.00000047683716, y: -0.0000009536743, z: 0}
+--- !u!65 &65974343499161520
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1589945783193830}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.9399998, y: 3.94, z: 0.01}
+  m_Center: {x: 0, y: -0.0000009536743, z: 0}
 --- !u!95 &95170730999982566
 Animator:
   serializedVersion: 3
@@ -1057,7 +1109,8 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114005647008310280}
-  SelectableColliders: []
+  SelectableColliders:
+  - {fileID: 65974343499161520}
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
@@ -1112,7 +1165,8 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114139911346994744}
-  SelectableColliders: []
+  SelectableColliders:
+  - {fileID: 65279246633808524}
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
@@ -1147,7 +1201,8 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114844298082564146}
-  SelectableColliders: []
+  SelectableColliders:
+  - {fileID: 65240736074674200}
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
@@ -1173,11 +1228,7 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 2
   Highlight: {fileID: 114013581869633658}
-  SelectableColliders:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  SelectableColliders: []
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
@@ -1199,7 +1250,8 @@ MonoBehaviour:
   IsPassThrough: 0
   ChildRowLength: 0
   Highlight: {fileID: 114641409128080214}
-  SelectableColliders: []
+  SelectableColliders:
+  - {fileID: 65048971622731566}
   DefaultSelectableIndex: 0
   AllowSelectionWrapX: 0
   AllowSelectionWrapY: 0
